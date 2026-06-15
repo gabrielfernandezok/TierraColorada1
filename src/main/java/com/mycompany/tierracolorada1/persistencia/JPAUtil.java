@@ -6,9 +6,11 @@ package com.mycompany.tierracolorada1.persistencia;
 
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 public class JPAUtil {
-
 
     private static EntityManagerFactory emf;
 
@@ -18,8 +20,10 @@ public class JPAUtil {
     public static EntityManagerFactory getEntityManagerFactory() {
         if (emf == null) {
             try {
-            
-                emf = Persistence.createEntityManagerFactory("Persistencia1");
+                Properties props = new Properties();
+                props.load(new FileInputStream("src/main/resources/config.properties"));
+
+                emf = Persistence.createEntityManagerFactory("Persistencia1", props);
             } catch (Exception e) {
                 System.out.println("ERROR GRAVE: No se pudo levantar la fábrica de conexiones JPA.");
                 e.printStackTrace();
