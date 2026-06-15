@@ -12,7 +12,8 @@ public class JPAUtil {
 
     private static EntityManagerFactory emf;
 
-    private JPAUtil() {}
+    private JPAUtil() {
+    }
 
     public static EntityManagerFactory getEntityManagerFactory() {
         if (emf == null) {

@@ -6,7 +6,9 @@ com\mycompany\tierracolorada1\modelos\Trazable.class
 com\mycompany\tierracolorada1\modelos\Productor.class
 com\mycompany\tierracolorada1\modelos\Usuario.class
 com\mycompany\tierracolorada1\modelos\Vehiculo.class
+com\mycompany\tierracolorada1\persistencia\UsuarioJPAControlador.class
 com\mycompany\tierracolorada1\modelos\Viaje.class
+com\mycompany\tierracolorada1\persistencia\JPAUtil.class
 com\mycompany\tierracolorada1\modelos\FleteTercerizado.class
 com\mycompany\tierracolorada1\modelos\Auditoria.class
 com\mycompany\tierracolorada1\modelos\Etapa.class

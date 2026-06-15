@@ -26,13 +26,20 @@ public class Principal {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+    try {
+        System.out.println("[JPA] Inicializando fábrica de conexiones y generando tablas...");
+        com.mycompany.tierracolorada1.persistencia.JPAUtil.getEntityManagerFactory();
+        System.out.println("[JPA] Conexión establecida y tablas sincronizadas en MySQL.");
+    } catch (Exception e) {
+        System.out.println("[JPA] Error al conectar a la base de datos en el arranque.");
+        e.printStackTrace();
+    }
     
-        BalanzaControlador balanzaCtrl = new BalanzaControlador();
-        ProcesoControlador procesoCtrl = new ProcesoControlador();
-        AuditoriaControlador seguridadCtrl = new AuditoriaControlador();
+    BalanzaControlador balanzaCtrl = new BalanzaControlador();
+    ProcesoControlador procesoCtrl = new ProcesoControlador();
+    AuditoriaControlador seguridadCtrl = new AuditoriaControlador();
 
-        
-        System.out.println(" SISTEMA DE TRAZABILIDAD - TIERRA COLORADA ");
+    System.out.println("    SISTEMA DE TRAZABILIDAD - TIERRA COLORADA     ");
     
 
         boolean loginExitoso = false;
