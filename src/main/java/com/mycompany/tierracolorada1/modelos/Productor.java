@@ -4,15 +4,27 @@
  */
 package com.mycompany.tierracolorada1.modelos;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Column;
+
 /**
- *
  * @author ryzen 5
  */
+@Entity 
 public class Productor implements Trazable {
 
+    @Id 
+    @Column(length = 15) 
     private String cuit;
+    
+    @Column(nullable = false) 
     private String nombre;
+    
     private String telefono;
+
+    public Productor() {
+    }
 
     public Productor(String cuit, String nombre, String telefono) {
         setCuit(cuit);
