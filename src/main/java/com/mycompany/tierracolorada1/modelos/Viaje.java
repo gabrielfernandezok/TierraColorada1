@@ -4,25 +4,46 @@
  */
 package com.mycompany.tierracolorada1.modelos;
 
-/**
- * @author ryzen 5
- */
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "viaje")
 public class Viaje {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_viaje")
+    private Long idViaje;
+
+    @Column(name = "distancia_recorrida_km", nullable = false)
     private double distanciaRecorridaKm;
+
+    @ManyToOne
+    @JoinColumn(name = "vehiculo_patente", nullable = false)
     private Vehiculo vehiculo;
+
+    public Viaje() {
+    }
 
     public Viaje(Vehiculo vehiculo, double distanciaRecorridaKm) {
         if (distanciaRecorridaKm < 0) {
             throw new IllegalArgumentException("La distancia recorrida no puede ser negativa.");
         }
+
         this.vehiculo = vehiculo;
         this.distanciaRecorridaKm = distanciaRecorridaKm;
     }
 
-
     public double calcularCostoTransporte() {
         return this.vehiculo.calcularCostoTransporte(this.distanciaRecorridaKm);
+    }
+
+    public Long getIdViaje() {
+        return idViaje;
+    }
+
+    public void setIdViaje(Long idViaje) {
+        this.idViaje = idViaje;
     }
 
     public double getDistanciaRecorridaKm() {
@@ -33,6 +54,7 @@ public class Viaje {
         if (distanciaRecorridaKm < 0) {
             throw new IllegalArgumentException("La distancia recorrida no puede ser negativa.");
         }
+
         this.distanciaRecorridaKm = distanciaRecorridaKm;
     }
 

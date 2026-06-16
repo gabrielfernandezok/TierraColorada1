@@ -21,7 +21,7 @@ public class BalanzaControlador {
         Vehiculo vehiculo = new CamionPropio(patente, marca, modelo, costoFijoMensual);
         Viaje viaje = new Viaje(vehiculo, distanciaKm);
         
-        Lote nuevoLote = new Lote(idLote, productor, viaje, pesoInicial, humedadInicial);
+        Lote nuevoLote = new Lote(productor, viaje, pesoInicial, humedadInicial);
         
         return nuevoLote;
     }
@@ -36,7 +36,7 @@ public class BalanzaControlador {
         Viaje viaje = new Viaje(vehiculo, distanciaKm);
         
 
-        Lote nuevoLote = new Lote(idLote, productor, viaje, pesoInicial, humedadInicial);
+        Lote nuevoLote = new Lote(productor, viaje, pesoInicial, humedadInicial);
         
         return nuevoLote;
     }

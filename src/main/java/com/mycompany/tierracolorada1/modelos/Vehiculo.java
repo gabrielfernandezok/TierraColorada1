@@ -19,6 +19,9 @@ public abstract class Vehiculo {
 @Column(nullable = false)
     private String modelo;
 
+    public Vehiculo() {
+    }
+
     public Vehiculo(String patente, String marca, String modelo) {
         this.patente = patente;
         this.marca = marca;

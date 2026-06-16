@@ -15,7 +15,11 @@ import jakarta.persistence.*;
 public class CamionPropio extends Vehiculo {
 
 @Column(nullable = false)
-    private double costoFijoMensual;
+private double costoFijoMensual;
+
+    public CamionPropio() {
+        super();
+    }
     
     public CamionPropio(String patente, String marca, String modelo, double costoFijoMensual) {
         super(patente, marca, modelo);

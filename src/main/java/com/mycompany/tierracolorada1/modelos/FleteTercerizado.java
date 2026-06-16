@@ -16,6 +16,10 @@ public class FleteTercerizado extends Vehiculo {
 @Column(nullable = false)
     private double costoPorKilometro;
 
+public FleteTercerizado() {
+        super();
+    }
+
     public FleteTercerizado(String patente, String marca, String modelo, double costoPorKilometro) {
         super(patente, marca, modelo);
         if (costoPorKilometro < 0) {

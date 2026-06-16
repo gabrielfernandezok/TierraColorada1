@@ -4,70 +4,133 @@
  */
 package com.mycompany.tierracolorada1.modelos;
 
-/**
- *
- * @author ryzen 5
- */
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "etapa_proceso")
 public class EtapaProceso implements Trazable {
 
-    private Etapa tipoEtapa; 
-    private double pesoEntrada;
-    private double merma;
-    private double pesoSalida;
 
-   
-    public EtapaProceso(Etapa tipoEtapa, double pesoEntrada) {
-        this.tipoEtapa = tipoEtapa;
-        this.pesoEntrada = pesoEntrada;
-        this.merma = 0.0;
-        this.pesoSalida = pesoEntrada;
-    }
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+@Column(name = "id_etapa_proceso")
+private Long id;
 
-    
-    public EtapaProceso(Etapa tipoEtapa, double pesoEntrada, double merma) {
-        this.tipoEtapa = tipoEtapa;
-        this.pesoEntrada = pesoEntrada;
-        this.merma = merma;
-        this.pesoSalida = pesoEntrada - merma;
-    }
+@Enumerated(EnumType.STRING)
+@Column(name = "tipo_etapa", nullable = false)
+private Etapa tipoEtapa;
 
-    public void registrarMerma(double kilosMerma) {
-    
-        if (kilosMerma < 0) {
-            throw new IllegalArgumentException("La merma no puede ser un valor negativo.");
-        }
-        if (kilosMerma > this.pesoEntrada) {
-            throw new IllegalArgumentException("Error operativo: La merma (" + kilosMerma 
-                    + " kg) no puede ser mayor al peso de entrada disponible (" + this.pesoEntrada + " kg).");
-        }
-        
-        this.merma = kilosMerma;
-        this.pesoSalida = this.pesoEntrada - kilosMerma;
-    }
+@Column(name = "peso_entrada", nullable = false)
+private double pesoEntrada;
 
-    
-    @Override
-    public String obtenerResumen() {
-        return "PROCESO - Fase: " + this.tipoEtapa + 
-               "Entrada: " + this.pesoEntrada + " kg" +
-               "Merma: " + this.merma + " kg" +
-               "Salida Neta: " + this.pesoSalida + " kg";
-    }
+@Column(nullable = false)
+private double merma;
 
-    public Etapa getTipoEtapa() {
-        return tipoEtapa;
-    }
+@Column(name = "peso_salida", nullable = false)
+private double pesoSalida;
 
-    public double getPesoEntrada() {
-        return pesoEntrada;
-    }
 
-    public double getMerma() {
-        return merma;
-    }
+@ManyToOne
+@JoinColumn(name = "id_lote", nullable = false)
+private Lote lote;
 
-    public double getPesoSalida() {
-        return pesoSalida;
-    }
-    
+public EtapaProceso() {
+}
+
+
+public EtapaProceso(Etapa tipoEtapa, double pesoEntrada) {
+this.tipoEtapa = tipoEtapa;
+this.pesoEntrada = pesoEntrada;
+this.merma = 0.0;
+this.pesoSalida = pesoEntrada;
+}
+
+
+public EtapaProceso(Etapa tipoEtapa, double pesoEntrada, double merma) {
+this.tipoEtapa = tipoEtapa;
+this.pesoEntrada = pesoEntrada;
+this.merma = merma;
+this.pesoSalida = pesoEntrada - merma;
+}
+
+public void registrarMerma(double kilosMerma) {
+
+if (kilosMerma < 0) {
+
+throw new IllegalArgumentException(
+
+"La merma no puede ser un valor negativo.");
+
+}
+
+if (kilosMerma > this.pesoEntrada) {
+
+throw new IllegalArgumentException(
+
+"Error operativo: La merma (" + kilosMerma
++ " kg) no puede ser mayor al peso de entrada disponible ("
++ this.pesoEntrada + " kg).");
+
+}
+
+this.merma = kilosMerma;
+
+this.pesoSalida = this.pesoEntrada - kilosMerma;
+
+}
+
+
+@Override
+
+public String obtenerResumen() {
+return "PROCESO - Fase: " + this.tipoEtapa
++ " Entrada: " + this.pesoEntrada + " kg"
++ " Merma: " + this.merma + " kg"
++ " Salida Neta: " + this.pesoSalida + " kg";
+}
+
+public Long getId() {
+return id;
+}
+
+public Etapa getTipoEtapa() {
+return tipoEtapa;
+}
+
+public void setTipoEtapa(Etapa tipoEtapa) {
+this.tipoEtapa = tipoEtapa;
+}
+
+public double getPesoEntrada() {
+return pesoEntrada;
+
+}
+
+public void setPesoEntrada(double pesoEntrada) {
+this.pesoEntrada = pesoEntrada;
+}
+
+public double getMerma() {
+return merma;
+}
+
+public void setMerma(double merma) {
+this.merma = merma;
+}
+
+public double getPesoSalida() {
+return pesoSalida;
+}
+
+public void setPesoSalida(double pesoSalida) {
+this.pesoSalida = pesoSalida;
+}
+
+public Lote getLote() {
+return lote;
+}
+
+public void setLote(Lote lote) {
+this.lote = lote;
+}
 }
