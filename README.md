@@ -20,21 +20,7 @@ El objetivo es que cada colaborador pueda ejecutar el proyecto en su entorno loc
 ---
 
 ### 3. Configuración de la base de datos
-Cada colaborador debe crear un archivo llamado `config.properties` en la carpeta `src/main/resources/`.
-
-El archivo debe contener lo siguiente:
-
-db.url=jdbc:mysql://localhost:3306/tierracolorada_bd?zeroDateTimeBehavior=CONVERT_TO_NULL
-db.user=tu_usuario_mysql // Acá borren tu_usuario_mysql y pongan root si es ese el usuario que supongo tienen en su workbench
-db.password=tu_contraseña_mysql // Acá borren tu_contraseña_mysql y pongan su contraseña para entrar en el workbench que tambien supongo que será root o ROOT o la contraseña que hayan puesto
-db.driver=com.mysql.cj.jdbc.Driver
-
-
-⚠️ **Importante**:  
-- Este archivo está ignorado en GitHub (`.gitignore`), por lo que cada uno debe crearlo manualmente en su PC.  
-- No subir credenciales personales al repositorio.
-
----
+Cada colaborador debe modificar el archivo persistence.xml borrando el user y password que se encuentra y agregando los que use para ingresar a su mysql workbench. 
 
 ### 4. Crear la base de datos
 En MySQL Workbench, creen la base de datos como hicimos en clase y ponganle el nombre de tierracolorada_bd
@@ -44,7 +30,7 @@ Clonar el repositorio con GitHub Desktop.
 
 Crear la base de datos en MySQL.
 
-Configurar el archivo config.properties con sus usuario y contraseña.
+Modificar el archivo persistence.xml con sus usuario y contraseña.
 
 Abrir el proyecto en NetBeans.
 
