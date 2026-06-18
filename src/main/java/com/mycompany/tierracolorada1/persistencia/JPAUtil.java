@@ -6,8 +6,6 @@ package com.mycompany.tierracolorada1.persistencia;
 
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import java.io.IOException;
-import java.util.Properties;
 
 public class JPAUtil {
 
@@ -16,19 +14,17 @@ public class JPAUtil {
     private JPAUtil() {
     }
 
-    public static EntityManagerFactory getEntityManagerFactory() {
+    public static synchronized EntityManagerFactory getEntityManagerFactory() {
         if (emf == null) {
             try {
-                Properties props = new Properties();
-                props.load(JPAUtil.class.getClassLoader().getResourceAsStream("config.properties"));
+                System.out.println("[JPA] Inicializando fabrica de conexiones y generando tablas...");
 
-                emf = Persistence.createEntityManagerFactory("Persistencia1", props);
-            } catch (IOException e) {
-                System.out.println("ERROR: No se pudo leer el archivo config.properties.");
-                e.printStackTrace();
-            } catch (Exception e) {
-                System.out.println("ERROR GRAVE: No se pudo levantar la fábrica de conexiones JPA.");
-                e.printStackTrace();
+        emf = Persistence.createEntityManagerFactory("Persistencia1");
+            System.out.println("[JPA] Fabrica de conexiones levantada");
+            } catch (Exception ex) {
+                System.err.println("ERROR GRAVE: No se pudo levantar la fabrica de conexiones JPA.");
+                ex.printStackTrace();
+                throw new RuntimeException("Error al inicializar la base de datos", ex);
             }
         }
         return emf;
@@ -37,6 +33,7 @@ public class JPAUtil {
     public static void shutdown() {
         if (emf != null && emf.isOpen()) {
             emf.close();
+            System.out.println("[JPA] Fabrica de conexiones cerrada de forma segura.");
         }
     }
 }
