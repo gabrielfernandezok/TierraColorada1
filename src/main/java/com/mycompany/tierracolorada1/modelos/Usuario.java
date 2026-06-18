@@ -8,7 +8,7 @@ import jakarta.persistence.*;
  * @author ryzen 5
  */
 @Entity
-@Table(name = "Usuarios")
+@Table(name = "Usuarios-gays")
 public class Usuario {
 
     @Id
