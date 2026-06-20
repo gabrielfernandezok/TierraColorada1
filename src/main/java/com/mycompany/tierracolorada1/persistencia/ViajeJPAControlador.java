@@ -4,44 +4,43 @@
  */
 package com.mycompany.tierracolorada1.persistencia;
 
-import com.mycompany.tierracolorada1.modelos.Usuario;
+import com.mycompany.tierracolorada1.modelos.Viaje;
 import jakarta.persistence.EntityManager;
 import java.util.List;
-
-public class UsuarioJPAControlador {
-
-
+/**
+ *
+ * @author ryzen 5
+ */
+public class ViajeJPAControlador {
     private EntityManager getEntityManager() {
         return JPAUtil.getEntityManagerFactory().createEntityManager();
     }
-
-    public void crear(Usuario usuario) {
+    
+    public void crear(Viaje viaje) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(usuario);
+            em.persist(viaje);
             em.getTransaction().commit();
-            System.out.println("Usuario guardado exitosamente en la Base de Datos.");
         } catch (Exception ex) {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-            System.out.println("ERROR EN PERSISTENCIA - Crear Usuario: " + ex.getMessage());
+            System.err.println("ERROR [ViajeJpa - Crear]: " + ex.getMessage());
+            throw ex;
         } finally {
             if (em != null && em.isOpen()) {
                 em.close();
             }
         }
     }
-
- 
-    public List<Usuario> buscarTodosLosUsuarios() {
+    
+    public Viaje buscarViajePorId(Long idViaje) {
         EntityManager em = getEntityManager();
         try {
- 
-            return em.createQuery("SELECT u FROM Usuario u", Usuario.class).getResultList();
+            return em.find(Viaje.class, idViaje);
         } catch (Exception ex) {
-            System.out.println("ERROR EN PERSISTENCIA - Buscar Usuarios: " + ex.getMessage());
+            System.err.println(" ERROR [ViajeJpa - Buscar por ID]: " + ex.getMessage());
             return null;
         } finally {
             if (em != null && em.isOpen()) {
@@ -50,12 +49,12 @@ public class UsuarioJPAControlador {
         }
     }
     
-    public Usuario buscarUsuarioPorId(int id) {
+    public List<Viaje> buscarTodosLosViajes() {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Usuario.class, id);
+            return em.createQuery("SELECT v FROM Viaje v", Viaje.class).getResultList();
         } catch (Exception ex) {
-            System.out.println("ERROR EN PERSISTENCIA - Buscar Usuario ID: " + ex.getMessage());
+            System.err.println("ERROR [ViajeJpa - Buscar Todos]: " + ex.getMessage());
             return null;
         } finally {
             if (em != null && em.isOpen()) {
@@ -63,20 +62,23 @@ public class UsuarioJPAControlador {
             }
         }
     }
-
-    public Usuario buscarUsuarioPorNombre(String nombreUsuario) {
-    EntityManager em = getEntityManager();
-    try {
-   
-        return em.find(Usuario.class, nombreUsuario);
-    } catch (Exception ex) {
-        System.out.println("ERROR EN PERSISTENCIA - Buscar Usuario por Nombre: " + ex.getMessage());
-        return null;
-    } finally {
-        if (em != null && em.isOpen()) {
-            em.close();
+    
+    public void editar(Viaje viaje) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.merge(viaje);
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            System.err.println("ERROR [ViajeJpa - Editar]: " + ex.getMessage());
+            throw ex;
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
         }
-      }
-   }
+    }
 }
-

@@ -4,44 +4,62 @@
  */
 package com.mycompany.tierracolorada1.persistencia;
 
-import com.mycompany.tierracolorada1.modelos.Usuario;
+import com.mycompany.tierracolorada1.modelos.Lote;
 import jakarta.persistence.EntityManager;
 import java.util.List;
-
-public class UsuarioJPAControlador {
-
-
+/**
+ *
+ * @author ryzen 5
+ */
+public class LoteJPAControlador {
     private EntityManager getEntityManager() {
         return JPAUtil.getEntityManagerFactory().createEntityManager();
     }
-
-    public void crear(Usuario usuario) {
+    
+    public void crear(Lote lote) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(usuario);
+            em.persist(lote);
             em.getTransaction().commit();
-            System.out.println("Usuario guardado exitosamente en la Base de Datos.");
         } catch (Exception ex) {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-            System.out.println("ERROR EN PERSISTENCIA - Crear Usuario: " + ex.getMessage());
+            System.err.println("ERROR LoteJpa - Crear: " + ex.getMessage());
+            throw ex;
         } finally {
             if (em != null && em.isOpen()) {
                 em.close();
             }
         }
     }
-
- 
-    public List<Usuario> buscarTodosLosUsuarios() {
+    
+    public void editar(Lote lote) {
         EntityManager em = getEntityManager();
         try {
- 
-            return em.createQuery("SELECT u FROM Usuario u", Usuario.class).getResultList();
+            em.getTransaction().begin();
+            em.merge(lote);
+            em.getTransaction().commit();
         } catch (Exception ex) {
-            System.out.println("ERROR EN PERSISTENCIA - Buscar Usuarios: " + ex.getMessage());
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            System.err.println("ERROR LoteJpa - Editar: " + ex.getMessage());
+            throw ex;
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+    }
+    
+    public Lote buscarLotePorId(int idLote) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.find(Lote.class, idLote);
+        } catch (Exception ex) {
+            System.err.println("ERROR LoteJpa - Buscar por ID: " + ex.getMessage());
             return null;
         } finally {
             if (em != null && em.isOpen()) {
@@ -50,12 +68,12 @@ public class UsuarioJPAControlador {
         }
     }
     
-    public Usuario buscarUsuarioPorId(int id) {
+    public List<Lote> buscarTodosLosLotes() {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Usuario.class, id);
+            return em.createQuery("SELECT l FROM Lote l", Lote.class).getResultList();
         } catch (Exception ex) {
-            System.out.println("ERROR EN PERSISTENCIA - Buscar Usuario ID: " + ex.getMessage());
+            System.err.println("ERROR LoteJpa - Buscar Todos: " + ex.getMessage());
             return null;
         } finally {
             if (em != null && em.isOpen()) {
@@ -63,20 +81,4 @@ public class UsuarioJPAControlador {
             }
         }
     }
-
-    public Usuario buscarUsuarioPorNombre(String nombreUsuario) {
-    EntityManager em = getEntityManager();
-    try {
-   
-        return em.find(Usuario.class, nombreUsuario);
-    } catch (Exception ex) {
-        System.out.println("ERROR EN PERSISTENCIA - Buscar Usuario por Nombre: " + ex.getMessage());
-        return null;
-    } finally {
-        if (em != null && em.isOpen()) {
-            em.close();
-        }
-      }
-   }
 }
-

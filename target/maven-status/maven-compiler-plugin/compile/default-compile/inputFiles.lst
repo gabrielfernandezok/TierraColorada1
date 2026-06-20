@@ -12,7 +12,11 @@ C:\Users\ryzen 5\Documents\NetBeansProjects\TierraColorada1\src\main\java\com\my
 C:\Users\ryzen 5\Documents\NetBeansProjects\TierraColorada1\src\main\java\com\mycompany\tierracolorada1\modelos\Usuario.java
 C:\Users\ryzen 5\Documents\NetBeansProjects\TierraColorada1\src\main\java\com\mycompany\tierracolorada1\modelos\Vehiculo.java
 C:\Users\ryzen 5\Documents\NetBeansProjects\TierraColorada1\src\main\java\com\mycompany\tierracolorada1\modelos\Viaje.java
+C:\Users\ryzen 5\Documents\NetBeansProjects\TierraColorada1\src\main\java\com\mycompany\tierracolorada1\persistencia\AuditoriaJPAControlador.java
 C:\Users\ryzen 5\Documents\NetBeansProjects\TierraColorada1\src\main\java\com\mycompany\tierracolorada1\persistencia\JPAUtil.java
+C:\Users\ryzen 5\Documents\NetBeansProjects\TierraColorada1\src\main\java\com\mycompany\tierracolorada1\persistencia\LoteJPAControlador.java
 C:\Users\ryzen 5\Documents\NetBeansProjects\TierraColorada1\src\main\java\com\mycompany\tierracolorada1\persistencia\ProductorJPAControlador.java
 C:\Users\ryzen 5\Documents\NetBeansProjects\TierraColorada1\src\main\java\com\mycompany\tierracolorada1\persistencia\UsuarioJPAControlador.java
+C:\Users\ryzen 5\Documents\NetBeansProjects\TierraColorada1\src\main\java\com\mycompany\tierracolorada1\persistencia\VehiculoJPAControlador.java
+C:\Users\ryzen 5\Documents\NetBeansProjects\TierraColorada1\src\main\java\com\mycompany\tierracolorada1\persistencia\ViajeJPAControlador.java
 C:\Users\ryzen 5\Documents\NetBeansProjects\TierraColorada1\src\main\java\com\mycompany\tierracolorada1\vistas\Principal.java

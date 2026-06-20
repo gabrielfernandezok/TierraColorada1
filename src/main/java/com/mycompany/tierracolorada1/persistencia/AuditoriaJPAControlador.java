@@ -4,29 +4,29 @@
  */
 package com.mycompany.tierracolorada1.persistencia;
 
-import com.mycompany.tierracolorada1.modelos.Usuario;
+import com.mycompany.tierracolorada1.modelos.Auditoria;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 
-public class UsuarioJPAControlador {
 
+public class AuditoriaJPAControlador {
 
     private EntityManager getEntityManager() {
         return JPAUtil.getEntityManagerFactory().createEntityManager();
     }
 
-    public void crear(Usuario usuario) {
+    public void crear(Auditoria auditoria) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(usuario);
+            em.persist(auditoria);
             em.getTransaction().commit();
-            System.out.println("Usuario guardado exitosamente en la Base de Datos.");
         } catch (Exception ex) {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-            System.out.println("ERROR EN PERSISTENCIA - Crear Usuario: " + ex.getMessage());
+            System.err.println("ERROR [AuditoriaJpa - Crear]: " + ex.getMessage());
+            throw ex;
         } finally {
             if (em != null && em.isOpen()) {
                 em.close();
@@ -34,28 +34,14 @@ public class UsuarioJPAControlador {
         }
     }
 
- 
-    public List<Usuario> buscarTodosLosUsuarios() {
+    public List<Auditoria> buscarTodasLasAuditorias() {
         EntityManager em = getEntityManager();
         try {
- 
-            return em.createQuery("SELECT u FROM Usuario u", Usuario.class).getResultList();
+        
+            return em.createQuery("SELECT a FROM Auditoria a ORDER BY a.fechaHora DESC", Auditoria.class)
+                     .getResultList();
         } catch (Exception ex) {
-            System.out.println("ERROR EN PERSISTENCIA - Buscar Usuarios: " + ex.getMessage());
-            return null;
-        } finally {
-            if (em != null && em.isOpen()) {
-                em.close();
-            }
-        }
-    }
-    
-    public Usuario buscarUsuarioPorId(int id) {
-        EntityManager em = getEntityManager();
-        try {
-            return em.find(Usuario.class, id);
-        } catch (Exception ex) {
-            System.out.println("ERROR EN PERSISTENCIA - Buscar Usuario ID: " + ex.getMessage());
+            System.err.println("ERROR [AuditoriaJpa - Buscar Todas]: " + ex.getMessage());
             return null;
         } finally {
             if (em != null && em.isOpen()) {
@@ -64,19 +50,19 @@ public class UsuarioJPAControlador {
         }
     }
 
-    public Usuario buscarUsuarioPorNombre(String nombreUsuario) {
-    EntityManager em = getEntityManager();
-    try {
-   
-        return em.find(Usuario.class, nombreUsuario);
-    } catch (Exception ex) {
-        System.out.println("ERROR EN PERSISTENCIA - Buscar Usuario por Nombre: " + ex.getMessage());
-        return null;
-    } finally {
-        if (em != null && em.isOpen()) {
-            em.close();
+    public List<Auditoria> buscarAuditoriasPorLote(int idLote) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery("SELECT a FROM Auditoria a WHERE a.lote.idLote = :idLote ORDER BY a.fechaHora DESC", Auditoria.class)
+                     .setParameter("idLote", idLote)
+                     .getResultList();
+        } catch (Exception ex) {
+            System.err.println("ERROR [AuditoriaJpa - Buscar por Lote]: " + ex.getMessage());
+            return null;
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
         }
-      }
-   }
+    }
 }
-
