@@ -28,17 +28,17 @@ public class Usuario {
     public Usuario() {
     }
     
-    public Usuario(String nombreUsuario, String nombreCompleto, String rol, String contrasenia) {
-        this.nombreUsuario = nombreUsuario;
-        this.nombreCompleto = nombreCompleto;
-        this.rol = rol;
-        this.contrasenia = contrasenia;
-    }
+    public Usuario(String nombreUsuario, String nombre, String rol, String contrasenia) {
+    this.nombreUsuario = nombreUsuario;
+    this.nombreCompleto = nombre;
+    this.rol = rol;
+    this.contrasenia = contrasenia;
+}
 
-    
-    public boolean verificarContrasenia(String intentoContrasenia) {
-        return this.contrasenia != null && this.contrasenia.equals(intentoContrasenia);
-    }
+public boolean verificarContrasenia(String contrasenia) {
+    return this.contrasenia.equals(contrasenia);
+}
+
 
 
     public int getIdUsuario() {
@@ -49,11 +49,11 @@ public class Usuario {
         this.idUsuario = idUsuario;
     }
 
-    public String getNombreCompleto() {
+    public String getNombre() {
         return nombreCompleto;
     }
 
-    public void setNombreCompleto(String nombreCompleto) {
+    public void setNombre(String nombreCompleto) {
         this.nombreCompleto = nombreCompleto;
     }
 

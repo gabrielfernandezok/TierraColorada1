@@ -52,19 +52,19 @@ public class ProductorJPAControlador {
         }
     }
 
-    public Productor buscarProductorPorCuit(String cuit) {
-        EntityManager em = getEntityManager();
-        try {
-            return em.find(Productor.class, cuit);
-        } catch (Exception ex) {
-            System.out.println("ERROR EN PERSISTENCIA [Buscar Productor por CUIT]: " + ex.getMessage());
-            return null;
-        } finally {
-            if (em != null && em.isOpen()) {
-                em.close();
-            }
+    public Productor buscarProductorPorId(String cuit) {
+    EntityManager em = getEntityManager();
+    try {
+        return em.find(Productor.class, cuit);
+    } catch (Exception ex) {
+        System.err.println("ERROR [ProductorJpa - Buscar por CUIT]: " + ex.getMessage());
+        return null;
+    } finally {
+        if (em != null && em.isOpen()) {
+            em.close();
         }
     }
+}
 
     public List<Productor> buscarTodosLosProductores() {
         EntityManager em = getEntityManager();

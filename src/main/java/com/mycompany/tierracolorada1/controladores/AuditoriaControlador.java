@@ -27,6 +27,21 @@ public class AuditoriaControlador {
         }
         return false; 
     }
+    
+    // Método para el Sign Up (Opción 1 del Main)
+    public boolean registrarNuevoUsuario(String usuario, String nombre, String rol, String contrasenia) {
+    if (usuarioDao.buscarUsuarioPorNombre(usuario) != null) {
+        return false; // El usuario ya existe en la base de datos
+    }
+    Usuario nuevo = new Usuario(usuario, nombre, rol, contrasenia);
+    usuarioDao.crear(nuevo);
+    return true;
+}
+
+// Método para saber quién está operando (Fase 2 del Main)
+    public Usuario getUsuarioAutenticado() {
+    return this.usuarioAutenticado;
+}
 
     public Auditoria registrarAuditoriaDeCambio(Lote loteModificado, double pesoAnterior, double pesoNuevo) {
         if (this.usuarioAutenticado == null) {
@@ -52,9 +67,5 @@ public class AuditoriaControlador {
 
     public void cerrarSesion() {
         this.usuarioAutenticado = null;
-    }
-
-    public Usuario getUsuarioAutenticado() {
-        return this.usuarioAutenticado;
     }
 }

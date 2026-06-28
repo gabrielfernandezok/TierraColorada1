@@ -57,14 +57,11 @@ public class Auditoria {
     
 
     public String obtenerDetalleAuditoria() {
-        return "[AUDITORÍA] Fecha/Hora: " + this.fechaHora
-                + " | Usuario: " + this.usuario.getNombreUsuario()
-                + " | Lote N°: " + this.lote.getIdLote()
-                + " | Etapa: " + this.etapaProcesada
-                + " | Peso Anterior: " + this.pesoAnterior + " kg"
-                + " | Peso Posterior: " + this.pesoPosterior + " kg"
-                + " | Humedad Inicial (Fija): " + this.humedadIngresoFija + "%";
-    }
+    return "AUDITORÍA N° " + idAuditoria + " | Lote: " + lote.getIdLote() 
+            + " | Operario: " + usuario.getNombre() 
+            + " | Peso Anterior: " + pesoAnterior + " kg"
+            + " | Peso Posterior: " + pesoPosterior + " kg";
+}
     
     public Long getIdAuditoria() {
         return idAuditoria;

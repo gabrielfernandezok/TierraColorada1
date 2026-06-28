@@ -4,162 +4,216 @@
 
 package com.mycompany.tierracolorada1.vistas;
 
-import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.List;
-
-
-import com.mycompany.tierracolorada1.controladores.BalanzaControlador;
-import com.mycompany.tierracolorada1.controladores.ProcesoControlador;
 import com.mycompany.tierracolorada1.controladores.AuditoriaControlador;
-
-
-import com.mycompany.tierracolorada1.modelos.Lote;
-import com.mycompany.tierracolorada1.modelos.Etapa;
-import com.mycompany.tierracolorada1.modelos.Auditoria;
+import com.mycompany.tierracolorada1.modelos.*;
+import com.mycompany.tierracolorada1.persistencia.*;
+import java.util.Scanner;
+import java.util.List;
 
 public class Principal {
 
-
-    private static List<Lote> baseDatosLotes = new ArrayList<>();
-
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner teclado = new Scanner(System.in);
 
-    try {
-        System.out.println("[JPA] Inicializando fábrica de conexiones y generando tablas...");
-        com.mycompany.tierracolorada1.persistencia.JPAUtil.getEntityManagerFactory();
-        System.out.println("[JPA] Conexión establecida y tablas sincronizadas en MySQL.");
-    } catch (Exception e) {
-        System.out.println("[JPA] Error al conectar a la base de datos en el arranque.");
-        e.printStackTrace();
-    }
-    
-    BalanzaControlador balanzaCtrl = new BalanzaControlador();
-    ProcesoControlador procesoCtrl = new ProcesoControlador();
-    AuditoriaControlador seguridadCtrl = new AuditoriaControlador();
+        AuditoriaControlador auditoriaCtrl = new AuditoriaControlador();
+        ProductorJPAControlador productorDao = new ProductorJPAControlador();
+        VehiculoJPAControlador vehiculoDao = new VehiculoJPAControlador();
+        LoteJPAControlador loteDao = new LoteJPAControlador();
+        AuditoriaJPAControlador auditoriaDao = new AuditoriaJPAControlador();
+        ViajeJPAControlador viajeDao = new ViajeJPAControlador();
 
-    System.out.println("    SISTEMA DE TRAZABILIDAD - TIERRA Colorada   ");
-    
+        System.out.println("====== SISTEMA TIERRA COLORADA ======");
+        boolean sistemaActivo = true;
 
-        boolean loginExitoso = false;
-        while (!loginExitoso) {
-            System.out.println("INICIO DE SESIÓN");
-            System.out.print("Ingrese Usuario (admin123): ");
-            String usuarioInput = scanner.nextLine();
-            System.out.print("Ingrese Contrasenia (yerba2026): ");
-            String claveInput = scanner.nextLine();
+        while (sistemaActivo) {
+            
+            // FASE 1: CONTROL DE ACCESO OBLIGATORIO
+            while (auditoriaCtrl.getUsuarioAutenticado() == null && sistemaActivo) {
+                System.out.println("\n--- BIENVENIDO: INGRESO AL SISTEMA ---");
+                System.out.println("1. Registrar un Nuevo Usuario (Sign Up)");
+                System.out.println("2. Iniciar Sesión (Log In)");
+                System.out.println("3. Salir del Programa");
+                System.out.print("Seleccione una opción: ");
+                
+                int opcionAcceso = 0;
+                try {
+                    opcionAcceso = Integer.parseInt(teclado.nextLine());
+                } catch (Exception e) {
+                    System.out.println("❌ Ingrese un número válido.");
+                    continue;
+                }
 
-            loginExitoso = seguridadCtrl.iniciarSesion(usuarioInput, claveInput);
+                switch (opcionAcceso) {
+                    case 1:
+                        System.out.println("\n=== REGISTRO DE NUEVO USUARIO ===");
+                        System.out.print("Nombre de Usuario (ID de texto): ");
+                        String userReg = teclado.nextLine();
+                        System.out.print("Nombre Completo: ");
+                        String nombreReg = teclado.nextLine();
+                        System.out.print("Rol (ej: Supervisor, Balancero): ");
+                        String rolReg = teclado.nextLine();
+                        System.out.print("Contraseña: ");
+                        String passReg = teclado.nextLine();
 
-            if (!loginExitoso) {
-                System.out.println("Credenciales incorrectas. Intente de nuevo.");
+                        boolean regOk = auditoriaCtrl.registrarNuevoUsuario(userReg, nombreReg, rolReg, passReg);
+                        if (regOk) {
+                            System.out.println("✅ ¡Usuario guardado en MySQL! Ya puede iniciar sesión.");
+                        } else {
+                            System.out.println("❌ No se pudo registrar (el usuario ya existe).");
+                        }
+                        break;
+
+                    case 2:
+                        System.out.println("\n=== INICIO DE SESIÓN EN BASE DE DATOS ===");
+                        System.out.print("Usuario: ");
+                        String userLog = teclado.nextLine();
+                        System.out.print("Contraseña: ");
+                        String passLog = teclado.nextLine();
+
+                        if (auditoriaCtrl.iniciarSesion(userLog, passLog)) {
+                            System.out.println("\n🔓 ¡Log In Exitoso! Bienvenido/a al sistema.");
+                        } else {
+                            System.out.println("❌ Credenciales incorrectas o usuario inexistente.");
+                        }
+                        break;
+
+                    case 3:
+                        System.out.println("👋 Saliendo del sistema de prueba.");
+                        sistemaActivo = false;
+                        break;
+
+                    default:
+                        System.out.println("❌ Opción inválida.");
+                }
+            }
+
+            // FASE 2: MENÚ OPERATIVO DE PLANTA
+            if (sistemaActivo) {
+                System.out.println("\n--- MENÚ DE OPERACIONES REALES ---");
+                System.out.println("3. Registrar un Productor");
+                System.out.println("4. Registrar un Vehículo");
+                System.out.println("5. Ingresar un Lote y Simular Merma (Auditoría Viva)");
+                System.out.println("6. Cerrar Sesión");
+                System.out.print("Seleccione una opción: ");
+
+                int opcionOperativa = 0;
+                try {
+                    opcionOperativa = Integer.parseInt(teclado.nextLine());
+                } catch (Exception e) {
+                    System.out.println("❌ Ingrese un número válido.");
+                    continue;
+                }
+
+                switch (opcionOperativa) {
+                    case 3:
+                        System.out.println("\n=== REGISTRO DE PRODUCTOR ===");
+                        System.out.print("CUIT del Productor (ej: 30-12345678-9): ");
+                        String cuitProd = teclado.nextLine();
+                        System.out.print("Nombre / Razón Social: ");
+                        String razonSocial = teclado.nextLine();
+                        System.out.print("Teléfono de Contacto: ");
+                        String telefono = teclado.nextLine();
+
+                        Productor nuevoProd = new Productor(cuitProd, razonSocial, telefono);
+                        productorDao.crear(nuevoProd);
+                        System.out.println("✅ Productor guardado en la base de datos.");
+                        break;
+
+                    case 4:
+                        System.out.println("\n=== REGISTRO DE VEHÍCULO ===");
+                        System.out.print("Patente (Clave Primaria): ");
+                        String patente = teclado.nextLine();
+                        System.out.print("Marca del Vehículo: ");
+                        String marca = teclado.nextLine();
+                        System.out.print("Modelo del Vehículo: ");
+                        String modelo = teclado.nextLine();
+                        System.out.print("¿Qué tipo es? (1: Camión Propio / 2: Flete Tercerizado): ");
+                        int tipoVehiculo = Integer.parseInt(teclado.nextLine());
+
+                        if (tipoVehiculo == 1) {
+                            System.out.print("Ingrese el Costo Fijo Mensual ($): ");
+                            double costoFijo = Double.parseDouble(teclado.nextLine());
+                            
+                            // Instancia exacta respetando tu constructor: (patente, marca, costoFijoMensual, modelo)
+                            CamionPropio cp = new CamionPropio(patente, marca, costoFijo, modelo);
+                            vehiculoDao.crear(cp);
+                        } else {
+                            System.out.print("Ingrese el Costo por Kilómetro ($): ");
+                            double costoKm = Double.parseDouble(teclado.nextLine());
+                            
+                            // Instancia exacta respetando tu constructor: (patente, marca, modelo, costoPorKilometro)
+                            FleteTercerizado ft = new FleteTercerizado(patente, marca, modelo, costoKm);
+                            vehiculoDao.crear(ft);
+                        }
+                        System.out.println("✅ Vehículo guardado polimórficamente en MySQL.");
+                        break;
+
+                    case 5:
+                        System.out.println("\n=== CIRCUITO DE LOTE Y AUDITORÍA ===");
+                        System.out.print("Kilos de Hoja Verde (Peso Inicial de Entrada): ");
+                        double pesoIn = Double.parseDouble(teclado.nextLine());
+                        System.out.print("Porcentaje de humedad (ej: 22.0): ");
+                        double humedad = Double.parseDouble(teclado.nextLine());
+                        System.out.print("CUIT del Productor (Debe existir en la BD): ");
+                        String cuitProdLote = teclado.nextLine();
+                        System.out.print("Patente del vehículo (Debe existir en la BD): ");
+                        String patenteLote = teclado.nextLine();
+                        System.out.print("Distancia recorrida por el camión (Km): ");
+                        double kms = Double.parseDouble(teclado.nextLine());
+
+                        // Recuperamos las relaciones desde MySQL
+                        Productor prodAsociado = productorDao.buscarProductorPorId(cuitProdLote);
+                        Vehiculo vehAsociado = vehiculoDao.buscarVehiculoPorPatente(patenteLote);
+
+                        if (prodAsociado == null || vehAsociado == null) {
+                            System.out.println("❌ ERROR: El productor o el vehículo no existen en la base de datos.");
+                            break;
+                        }
+
+                        // Creamos el viaje asociando el vehículo 
+                        Viaje viajeReal = new Viaje(vehAsociado, kms); 
+                        
+                        // 2. 🔥 AGREGAR ESTA LÍNEA: Guardamos el viaje para que MySQL le genere un ID
+                        viajeDao.crear(viajeReal); 
+                        
+                        // Creamos el lote con el orden exacto de tu constructor 
+                        Lote loteReal = new Lote(prodAsociado, viajeReal, pesoIn, humedad);
+                        loteDao.crear(loteReal); // Guarda el lote y la etapa INGRESO automáticamente por cascada [cite: 31, 33]
+                        System.out.println("✅ Lote N° " + loteReal.getIdLote() + " guardado con éxito en etapa de INGRESO.");
+
+                        // Avanzamos el lote a Sapecado usando tus métodos nativos 
+                        System.out.println("\n--- Procesando Lote: Avanzando a etapa de SAPECADO ---");
+                        loteReal.avanzarNuevaEtapa(Etapa.SAPECADO); // Agrega la etapa a la lista 
+                        
+                        System.out.print("¿Cuántos kilos pesa el lote AL SALIR del Sapecado? (Peso de Salida): ");
+                        double pesoPostSapecado = Double.parseDouble(teclado.nextLine());
+
+                        // Seteamos el peso de salida en la etapa actual (Sapecado)
+                        loteReal.getEtapaActual().setPesoSalida(pesoPostSapecado);
+                        loteDao.editar(loteReal); // Guardamos la actualización en MySQL [cite: 31]
+                        
+                        // 🔥 Registramos la auditoría de cambio usando tu controlador de negocio
+                        auditoriaCtrl.registrarAuditoriaDeCambio(loteReal, pesoIn, pesoPostSapecado);
+
+                        // Consultamos MySQL para verificar
+                        System.out.println("\n🔍 [VERIFICACIÓN] Leyendo rastro de auditoría desde MySQL...");
+                        List<Auditoria> listaAuditorias = auditoriaDao.buscarTodasLasAuditorias();
+                        if (listaAuditorias != null && !listaAuditorias.isEmpty()) {
+                            System.out.println(listaAuditorias.get(0).obtenerDetalleAuditoria());
+                        }
+                        break;
+
+                    case 6:
+                        auditoriaCtrl.cerrarSesion();
+                        System.out.println("🔒 Sesión cerrada.");
+                        break;
+
+                    default:
+                        System.out.println("❌ Opción inválida.");
+                }
             }
         }
-
-        System.out.println("¡Login Exitoso!" 
-                + seguridadCtrl.getUsuarioAutenticado().getNombreCompleto() 
-                + " [" + seguridadCtrl.getUsuarioAutenticado().getRol() + "]");
-
-
-
-        System.out.println(" PUESTO DE BALANZA: REGISTRO DE HOJA VERDE       ");
-
-        
-        System.out.print("Ingrese el número/ID del nuevo Lote: ");
-        int idLote = scanner.nextInt();
-        scanner.nextLine();
-
-        System.out.print("Nombre del Productor: ");
-        String nomProd = scanner.nextLine();
-        System.out.print("CUIT del Productor: ");
-        String cuitProd = scanner.nextLine();
-        System.out.print("Numero de telefono de Productor: ");
-        String nroProd = scanner.nextLine();
-
-        System.out.print("Patente del Camión: ");
-        String patente = scanner.nextLine();
-        System.out.print("Distancia recorrida desde el Yerbal (Km): ");
-        double km = scanner.nextDouble();
-        System.out.print("Kilos Iniciales de Hoja Verde: ");
-        double kilosIni = scanner.nextDouble();
-        System.out.print("Porcentaje de Humedad Inicial (%): ");
-        double humedad = scanner.nextDouble();
-
-        System.out.println("Tipo de Transporte:");
-        System.out.println("1. Camión Propio (Logística Interna)");
-        System.out.println("2. Flete Tercerizado (Fletero Particular)");
-        System.out.print("Seleccione una opción: ");
-        int tipoFlete = scanner.nextInt();
-
-        Lote nuevoLote = null;
-
-        if (tipoFlete == 1) {
-       
-            nuevoLote = balanzaCtrl.registrarIngresoCamionPropio(
-                    idLote, cuitProd, nomProd, nroProd, patente, "Mercedes-Benz", "Atego", 
-                    150000.0, km, kilosIni, humedad
-            );
-        } else {
-            System.out.print("Ingrese la Tarifa pactada por Kilómetro ($): ");
-            double tarifa = scanner.nextDouble();
-            
-            nuevoLote = balanzaCtrl.registrarIngresoFleteTercerizado(
-                    idLote, cuitProd, nomProd, nroProd, patente, "Ford", "Cargo", 
-                    tarifa, km, kilosIni, humedad
-            );
-        }
-
-    
-        baseDatosLotes.add(nuevoLote);
-        System.out.println("¡Lote " + nuevoLote.getIdLote() + " registrado con éxito en Balanza!");
-        System.out.println("Costo calculado del viaje: $" + balanzaCtrl.obtenerCostoFleteTotal(nuevoLote));
-
-    
-    
-        System.out.println(" PLANTA DE SECADO: CIRCUITO TECNOLÓGICO ");
-    
-        
-        System.out.println("Pesaje actual del Lote en planta: " + procesoCtrl.consultarPesoActualEnPlanta(nuevoLote) + " kg.");
-        System.out.println("Cambiando lote al sector de [SAPECADO]...");
-        
-    
-        procesoCtrl.iniciarNuevaEtapa(nuevoLote, Etapa.SAPECADO);
-        
-        System.out.print("Ingrese los kilos de MERMA detectados en el Sapecado: ");
-        double kilosMerma = scanner.nextDouble();
-
-        double pesoAntesDeModificar = procesoCtrl.consultarPesoActualEnPlanta(nuevoLote);
-
-        try {
-        
-            procesoCtrl.registrarMermaEnEtapaActual(nuevoLote, kilosMerma);
-            double pesoNuevo = procesoCtrl.consultarPesoActualEnPlanta(nuevoLote);
-            System.out.println("Merma aplicada. Nuevo peso remanente del lote: " + pesoNuevo + " kg.");
-
-            Auditoria log = seguridadCtrl.registrarAuditoriaDeCambio(nuevoLote, pesoAntesDeModificar, pesoNuevo);
-            
-            System.out.println(" Registro de Auditoría N° " + log.getIdAuditoria() + " creado.");
-            System.out.println(" Operario responsable: " + log.getUsuario().getNombreCompleto());
-            System.out.println(" Fecha/Hora del registro: " + log.getFechaHora());
-
-        } catch (IllegalArgumentException e) {
-            System.out.println(" Error en el modelo: " + e.getMessage());
-        } catch (IllegalStateException e) {
-            System.out.println(" Error de flujo: " + e.getMessage());
-        }
-
-    
-        System.out.println(" SALIDA DE INFORMACIÓN: CONTROL DE CALIDAD ");
-
-        
-
-        System.out.println(nuevoLote.obtenerResumen());
-        
-
-        System.out.println(" SIMULACIÓN FINALIZADA CORRECTAMENTE ");
-        
-        scanner.close();
+        teclado.close();
     }
 }
 

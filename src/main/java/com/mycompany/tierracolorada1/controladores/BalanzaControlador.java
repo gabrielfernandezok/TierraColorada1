@@ -18,7 +18,7 @@ public class BalanzaControlador {
                                              double distanciaKm, double pesoInicial, double humedadInicial) {
         
         Productor productor = new Productor(cuitProd, nombreProd, nroProductor);
-        Vehiculo vehiculo = new CamionPropio(patente, marca, modelo, costoFijoMensual);
+        Vehiculo vehiculo = new CamionPropio(patente, marca, costoFijoMensual, modelo);
         Viaje viaje = new Viaje(vehiculo, distanciaKm);
         
         Lote nuevoLote = new Lote(productor, viaje, pesoInicial, humedadInicial);

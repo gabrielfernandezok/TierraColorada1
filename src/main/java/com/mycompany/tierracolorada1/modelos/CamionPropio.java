@@ -21,7 +21,7 @@ private double costoFijoMensual;
         super();
     }
     
-    public CamionPropio(String patente, String marca, String modelo, double costoFijoMensual) {
+    public CamionPropio(String patente, String marca, double costoFijoMensual, String modelo) {
         super(patente, marca, modelo);
         this.costoFijoMensual = costoFijoMensual;
     }
