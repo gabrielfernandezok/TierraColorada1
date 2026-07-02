@@ -67,16 +67,21 @@ public class UsuarioJPAControlador {
     public Usuario buscarUsuarioPorNombre(String nombreUsuario) {
     EntityManager em = getEntityManager();
     try {
-   
-        return em.find(Usuario.class, nombreUsuario);
+        // En lugar de em.find, hacemos una consulta JPQL que busca por el atributo de texto
+        return em.createQuery("SELECT u FROM Usuario u WHERE u.nombreUsuario = :userText", Usuario.class)
+                 .setParameter("userText", nombreUsuario.trim())
+                 .getSingleResult();
+    } catch (jakarta.persistence.NoResultException e) {
+        // Si no encuentra ningún usuario con ese texto, devolvemos null de forma segura
+        return null;
     } catch (Exception ex) {
-        System.out.println("ERROR EN PERSISTENCIA - Buscar Usuario por Nombre: " + ex.getMessage());
+        System.err.println("ERROR [UsuarioJpa - Buscar por Nombre de Usuario]: " + ex.getMessage());
         return null;
     } finally {
         if (em != null && em.isOpen()) {
             em.close();
         }
-      }
-   }
+    }
+}
 }
 

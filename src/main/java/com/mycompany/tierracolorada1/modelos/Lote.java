@@ -145,9 +145,10 @@ return porcentajeHumedad;
 }
 
 public void setPorcentajeHumedad(double porcentajeHumedad) {
-
-this.porcentajeHumedad = porcentajeHumedad;
-
+    if (porcentajeHumedad < 0.0 || porcentajeHumedad > 100.0) {
+        throw new IllegalArgumentException("Error: El porcentaje de humedad debe estar estrictamente entre 0% y 100%.");
+    }
+    this.porcentajeHumedad = porcentajeHumedad;
 }
 
 public LocalDateTime getFechaHoraIngreso() {

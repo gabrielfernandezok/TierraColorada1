@@ -19,20 +19,23 @@ public class AuditoriaControlador {
     }
 
     public boolean iniciarSesion(String nombreUsuario, String contrasenia) {
-        Usuario usuarioBuscado = usuarioDao.buscarUsuarioPorNombre(nombreUsuario);
+  
+    Usuario usuarioBuscado = usuarioDao.buscarUsuarioPorNombre(nombreUsuario);
 
-        if (usuarioBuscado != null && usuarioBuscado.verificarContrasenia(contrasenia)) {
-            this.usuarioAutenticado = usuarioBuscado;
-            return true;
-        }
-        return false; 
+    if (usuarioBuscado != null && usuarioBuscado.verificarContrasenia(contrasenia)) {
+        this.usuarioAutenticado = usuarioBuscado;
+        return true;
     }
+    return false; 
+}
     
     // Método para el Sign Up (Opción 1 del Main)
     public boolean registrarNuevoUsuario(String usuario, String nombre, String rol, String contrasenia) {
+    // Validamos por TEXTO que no exista ya ese usuario en MySQL
     if (usuarioDao.buscarUsuarioPorNombre(usuario) != null) {
-        return false; // El usuario ya existe en la base de datos
+        return false; // El nombre de usuario ya está ocupado, rechaza el registro
     }
+    
     Usuario nuevo = new Usuario(usuario, nombre, rol, contrasenia);
     usuarioDao.crear(nuevo);
     return true;

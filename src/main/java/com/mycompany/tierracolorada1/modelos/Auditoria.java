@@ -58,7 +58,7 @@ public class Auditoria {
 
     public String obtenerDetalleAuditoria() {
     return "AUDITORÍA N° " + idAuditoria + " | Lote: " + lote.getIdLote() 
-            + " | Operario: " + usuario.getNombre() 
+            + " | Operario: " + usuario.getNombreCompleto() 
             + " | Peso Anterior: " + pesoAnterior + " kg"
             + " | Peso Posterior: " + pesoPosterior + " kg";
 }

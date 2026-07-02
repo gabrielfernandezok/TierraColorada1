@@ -64,13 +64,7 @@ throw new IllegalArgumentException(
 }
 
 if (kilosMerma > this.pesoEntrada) {
-
-throw new IllegalArgumentException(
-
-"Error operativo: La merma (" + kilosMerma
-+ " kg) no puede ser mayor al peso de entrada disponible ("
-+ this.pesoEntrada + " kg).");
-
+    throw new IllegalArgumentException("Error operativo: La merma no puede ser mayor al peso de entrada disponible.");
 }
 
 this.merma = kilosMerma;

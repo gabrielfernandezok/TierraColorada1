@@ -49,11 +49,11 @@ public boolean verificarContrasenia(String contrasenia) {
         this.idUsuario = idUsuario;
     }
 
-    public String getNombre() {
+    public String getNombreCompleto() {
         return nombreCompleto;
     }
 
-    public void setNombre(String nombreCompleto) {
+    public void setNombreCompleto(String nombreCompleto) {
         this.nombreCompleto = nombreCompleto;
     }
 
@@ -62,8 +62,15 @@ public boolean verificarContrasenia(String contrasenia) {
     }
 
     public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
+    if (nombreUsuario == null || nombreUsuario.trim().length() < 4) {
+        throw new IllegalArgumentException("El nombre de usuario debe tener al menos 4 caracteres válidos (sin espacios vacíos).");
     }
+    // Evita espacios intermedios o caracteres que rompan la consola
+    if (!nombreUsuario.matches("^[a-zA-Z0-9_]+$")) {
+        throw new IllegalArgumentException("El nombre de usuario solo puede contener letras, números y guiones bajos (_).");
+    }
+    this.nombreUsuario = nombreUsuario.trim();
+}
 
     public String getRol() {
         return rol;

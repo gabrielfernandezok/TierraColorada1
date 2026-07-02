@@ -35,8 +35,22 @@ public abstract class Vehiculo {
     }
 
     public void setPatente(String patente) {
-        this.patente = patente;
+    if (patente == null || patente.trim().isEmpty()) {
+        throw new IllegalArgumentException("La patente no puede estar vacía.");
     }
+    
+    // Limpiamos espacios y pasamos a mayúsculas por si el usuario tipeó en minúsculas
+    String patenteLimpia = patente.trim().toUpperCase();
+    
+    // Formato Viejo (AAA123) o Formato Mercosur (AA123AA)
+    String regexVieja = "^[A-Z]{3}\\d{3}$";
+    String regexMercosur = "^[A-Z]{2}\\d{3}[A-Z]{2}$";
+    
+    if (!patenteLimpia.matches(regexVieja) && !patenteLimpia.matches(regexMercosur)) {
+        throw new IllegalArgumentException("Formato de patente inválido. Debe ser estándar (ej: ABC123 o AA123AA) sin espacios ni símbolos.");
+    }
+    this.patente = patenteLimpia;
+}
 
     public String getMarca() {
         return marca;
